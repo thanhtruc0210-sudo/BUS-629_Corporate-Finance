@@ -1,4 +1,6 @@
 ---
+template: "company-selection"
+stage: 2
 title: "Company Selection Memo: Apple Inc. (NASDAQ: AAPL)"
 author: "Truc Pham"
 date: "2026-05-15"
