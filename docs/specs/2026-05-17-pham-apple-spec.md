@@ -12,8 +12,15 @@ notes: "Stage 4 deliverable for BUS-629. Source model: models/builds/2026-05-16-
 
 **Author:** Truc Pham
 **Date:** 2026-05-17
-**Version:** 1.0
+**Version:** 1.1
 **Company:** Apple Inc., AAPL, NASDAQ
+
+> **Changelog v1.0 → v1.1** (post-HIL iteration — see `analysis/validation/2026-05-17-pham-apple-stage4-iteration.md`):
+> (1) §3 — added the complete Cash Flow Statement: working-capital bridge, capex and investing breakdown, the **financing-activities breakdown**, and **net increase/(decrease) in cash** (v1.0 exposed only `CASH_operating` and `CASH_investments`, so executors could not report financing or net cash change);
+> (2) §3 — flagged that `CASH_investments` is a *net* investing total (it nets +$29,390 asset sales against −$12,715 capex) and is **not** capex; free cash flow must use the explicit capex line, not `CASH_investments`;
+> (3) §7 / §10 — added a required **Cash-Flow Analysis** section to the deliverable;
+> (4) §7 / §9 — added a benchmark-sourcing rule barring unsourced external figures (peer ratios, credit ratings) as evidence;
+> (5) §9 — added a cross-reference convention; (6) §10 — reconciled the length target with Part B content.
 
 ---
 
@@ -116,12 +123,49 @@ All values in **USD millions** unless noted. FY current = FY2025; FY prior = FY2
 | `INC_dividends` | Income Statement | 15,421 | $M |
 | `INC_addition_retained_earnings` *(formula)* | Income Statement | 96,589 | $M |
 
-**Cash Flow Statement (FY2025)**
+**Cash Flow Statement (FY2025)** — complete. Only two lines carry named ranges (`CASH_operating`, `CASH_investments`); all others are stated explicitly here by label and **must be reported in the deliverable's Cash-Flow Analysis section even though they have no named range.** Lines marked *(formula)* are subtotals.
 
-| Named Range | Source | Value | Unit |
-|-------------|--------|------:|------|
-| `CASH_operating` *(= net income + dep + Δworking capital)* | Cash Flow | 111,482 | $M |
-| `CASH_investments` *(formula, sum of investing)* | Cash Flow | 15,195 | $M |
+*Operations*
+
+| Line | Named Range | Value | Unit |
+|------|-------------|------:|------|
+| Net income | `INC_net` | 112,010 | $M |
+| plus Depreciation | `INC_depreciation` | 11,698 | $M |
+| Δ Accounts receivable | — | −7,029 | $M |
+| Δ Inventories | — | 1,400 | $M |
+| Δ Other current assets | — | −9,197 | $M |
+| Δ Accounts payable | — | 902 | $M |
+| Δ Other current liabilities | — | 1,698 | $M |
+| Total change in working capital *(formula)* | — | −12,226 | $M |
+| **Cash provided by operations** *(formula)* | `CASH_operating` | **111,482** | $M |
+
+*Investing*
+
+| Line | Named Range | Value | Unit |
+|------|-------------|------:|------|
+| Capital expenditures | — | −12,715 | $M |
+| plus Sales (acquisitions) of long-term assets | — | 29,390 | $M |
+| plus Other investing activities | — | −1,480 | $M |
+| **Cash provided by (used for) investments** *(formula)* | `CASH_investments` | **15,195** | $M |
+
+*Financing*
+
+| Line | Named Range | Value | Unit |
+|------|-------------|------:|------|
+| Δ Short-term debt | — | −2,032 | $M |
+| plus Δ Long-term debt | — | −6,451 | $M |
+| plus Dividends paid | — | −15,421 | $M |
+| plus Issues (repurchases) of stock | — | −90,711 | $M |
+| plus Other financing | — | −6,071 | $M |
+| **Cash provided by (used for) financing** *(formula)* | — | **−120,686** | $M |
+
+*Net change*
+
+| Line | Named Range | Value | Unit |
+|------|-------------|------:|------|
+| **Net increase/(decrease) in cash** *(= operating + investing + financing)* | — | **5,991** | $M |
+
+> **Caution — `CASH_investments` is not capex.** `CASH_investments` (+15,195) is a *net* investing total that nets +29,390 of long-term-asset sales against −12,715 of capital expenditures. Free cash flow, if reported, must be `CASH_operating − |capital expenditures|` = 111,482 − 12,715 = **98,767**, never `CASH_operating − CASH_investments`.
 
 **Analyst Assumptions (Ratios tab)**
 
@@ -245,8 +289,11 @@ The executor must verify each before reporting results:
 
 ### 7. Analysis Requirements
 
-For each category, interpret the level, the trend vs. FY2024 where derivable, and cross-category linkages. Benchmarks: Apple's own prior year, large-cap US tech peers (Microsoft, Alphabet), and general norms (current ratio ~1.5–2.0; total debt ratio < 60% as a conventional comfort line).
+For each category, interpret the level, the trend vs. FY2024 where derivable, and cross-category linkages.
 
+**Benchmark-sourcing rule.** Permitted benchmarks are limited to: (1) Apple's own FY2024 comparative as derivable from the data in §3/§4, and (2) the general norms stated in this section (current ratio ~1.5–2.0; total debt ratio < 60% as a conventional comfort line). The executor must **not** introduce specific external figures it cannot derive from this spec — no peer ratio values, credit ratings, segment revenue figures, or named-competitor comparisons. Qualitative directional references ("below large-cap tech norms") are acceptable; quantitative external claims and rating-agency grades are not, and must not appear as recommendation evidence.
+
+- **Cash-Flow Analysis (required):** Narrate the FY2025 cash-flow story using the complete §3 Cash Flow data: operating cash ($111,482) vs. net income ($112,010); the working-capital drag (−$12,226); investing (+$15,195, noting it is net of −$12,715 capex and +$29,390 asset sales — *not* a capex proxy); the dominant financing outflow (−$120,686, of which −$90,711 is buybacks and −$15,421 dividends); and the resulting net change in cash (+$5,991). Connect the −$90,711 buyback line to the negative retained earnings and the leverage/ROE distortion discussed elsewhere. If free cash flow is cited, use `CASH_operating − |capex|` = $98,767 (see §3 caution).
 - **Performance:** Explain the extraordinary market-to-book (51x) and MVA ($3.7T) as the market capitalizing Apple's intangible/brand and capital-return engine that the GAAP balance sheet does not record. Tie EVA ($99.9B positive) to value creation well above the 8.5% cost of capital.
 - **Profitability:** ROE (196.68%) and ROC (78.49%) are inflated by a thin, buyback-depleted equity base, not purely operating excellence — connect to leverage. Contrast with the more stable averaged variants.
 - **Efficiency:** Strong inventory turnover (30.3x; 12 days) reflects Apple's supply-chain model. Asset turnover (1.14x) and 58-day collection period give the operating-efficiency picture feeding Du Pont.
@@ -259,19 +306,22 @@ Decompose ROE = `leverage × asset_turnover × operating_profit_margin × debt_b
 
 ### 9. Strategic Recommendations
 
-Provide **3–5** recommendations. Each must: (a) cite specific ratio evidence by name and value; (b) state the financial implication; (c) be actionable and specific (a decision a CFO/board could act on), not generic ("improve efficiency"). At least one must address the capital-structure / negative-equity question and at least one the sub-1.0 liquidity position. Flag any recommendation whose support depends on the known model limitations in Section 6.
+Provide **3–5** recommendations. Each must: (a) cite specific ratio evidence by name and value; (b) state the financial implication; (c) be actionable and specific (a decision a CFO/board could act on), not generic ("improve efficiency"). At least one must address the capital-structure / negative-equity question, at least one the sub-1.0 liquidity position, and at least one must draw on the Cash-Flow Analysis (§7). Flag any recommendation whose support depends on the known model limitations in Section 6.
+
+**Evidence & cross-reference rules:** (i) Every figure cited as evidence must be traceable to §3, §4, §5, or the §7 cash-flow narrative — no unsourced external evidence (per the §7 benchmark-sourcing rule). (ii) Number recommendations R1…Rn. When referring to another part of the memo, cite it by its section name or heading (e.g., "see Du Pont Decomposition"), never by a bare "Recommendation N" that collides with the recommendation numbering.
 
 ### 10. Output Format
 
-- **Format:** Markdown memo, ~1,200–1,800 words (3–5 pages).
+- **Format:** Markdown memo, **~2,200–3,000 words (5–7 pages)**. (v1.0 specified 1,200–1,800; that ceiling was unachievable given the seven mandated sections below — the executor's v1.0 output ran ~3,165 words. The target is raised to match the required content.) If length must be constrained, prioritize in this order: Du Pont Decomposition → Strategic Recommendations → Cash-Flow Analysis → Ratio Analysis → Limitations → Executive Summary → Company & Data Basis; compress lower-priority sections first.
 - **Audience / tone:** Finance-literate reviewer; analytical and direct; define a metric only when its interpretation is non-obvious for Apple.
 - **Structure (in order):**
   1. **Executive Summary** — 4–6 sentences: overall financial health verdict.
   2. **Company & Data Basis** — period, standard, currency, source filing, key reclassifications.
   3. **Ratio Analysis by Category** — Performance, Profitability, Efficiency, Leverage, Liquidity; each with a results table (ratio · value · brief read).
-  4. **Du Pont Decomposition** — component table + driver/sustainability narrative + the ROE-gap explanation.
-  5. **Strategic Recommendations** — numbered 3–5, each in the (a)/(b)/(c) form from Section 9.
-  6. **Limitations & Validation** — results of the Section 6 checks and the model's prior-year/current-year timing caveat.
+  4. **Cash-Flow Analysis** — operating vs. net income, working-capital drag, investing (net, not capex), financing breakdown (buybacks/dividends), net change in cash, and free cash flow per §3 caution. Required per §7.
+  5. **Du Pont Decomposition** — component table + driver/sustainability narrative + the ROE-gap explanation.
+  6. **Strategic Recommendations** — numbered R1…Rn (3–5), each in the (a)/(b)/(c) form from Section 9.
+  7. **Limitations & Validation** — results of the Section 6 checks and the model's prior-year/current-year timing caveat.
 - **Ratio presentation:** percentages to 2 decimals, multiples ("x") to 2 decimals, currency in $M (or $T where clearer for market cap/MVA).
 
 ---
