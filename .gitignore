@@ -11,3 +11,6 @@ Thumbs.db
 # Editor backups
 *.tmp
 *.bak
+
+# Local tool config
+.claude/
